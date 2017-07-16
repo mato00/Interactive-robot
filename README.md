@@ -12,3 +12,5 @@ engineering project about interactive robot in unfamiliar environment containing
 * 机器人的交互模块
 * 最终的整合与通信
 
+### 机器人的运动模块
+基于之前工作的经验，要想在小车同时采用ros同步即时采集传感器数据，最好用讲小车驱动和传感器分布到两个线程。之前尝试基于Arduino单核写个伪多线程，结果发现时钟不够用，Arduino还是太弱了，不过正好手头有两块Arduino UNO，不妨尝试加一块。
