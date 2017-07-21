@@ -8,7 +8,7 @@ using namespace std;
 using namespace cv;
 
 void findFuture(Mat &img1, Mat &img2, vector<KeyPoint> &kp1, vector<KeyPoint> &kp2,
-                vector<DMatch> matches_all, vector<DMatch> matches_gf);
+                vector<DMatch> &matches_all, vector<DMatch> &matches_gf);
 
 void poseEstimation(vector<KeyPoint> kp1, vector<KeyPoint> kp2, vector<DMatch> matches, Mat& R, Mat& t);
 
@@ -34,7 +34,7 @@ int main(int argc, char** argv){
 }
 
 void findFuture(Mat &img1, Mat &img2, vector<KeyPoint> &kp1, vector<KeyPoint> &kp2,
-                vector<DMatch> matches_all, vector<DMatch> matches_gf){
+                vector<DMatch> &matches_all, vector<DMatch> &matches_gf){
    Mat d1, d2;
    // ORB初始化
    Ptr<ORB> orb = ORB::create(1000);
@@ -56,9 +56,20 @@ void findFuture(Mat &img1, Mat &img2, vector<KeyPoint> &kp1, vector<KeyPoint> &k
    for(size_t i = 0; i < vbInliers.size(); i++){
      if(vbInliers[i] == true){
        matches_gf.push_back(matches_all[i]);
+       // cout << matches_gf[i].distance << endl;
      }
    }
 
+
+}
+
+Point2d pixel2cam ( const Point2d& p, const Mat& K )
+{
+    return Point2d
+           (
+               ( p.x - K.at<double> ( 0,2 ) ) / K.at<double> ( 0,0 ),
+               ( p.y - K.at<double> ( 1,2 ) ) / K.at<double> ( 1,1 )
+           );
 }
 
 void poseEstimation(vector<KeyPoint> kp1, vector<KeyPoint> kp2, vector<DMatch> matches, Mat& R, Mat& t){
